@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=-lcgicc 
-SOURCES=main.cpp template.cpp
+SOURCES=main.cpp template.cpp urlhandlerstartpage.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=index.bla
 
