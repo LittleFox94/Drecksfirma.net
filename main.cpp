@@ -7,6 +7,7 @@
 #include "inc/urlhandler.h"
 
 #include "inc/urlhandlerstartpage.h"
+#include "inc/urlhandlercontact.h"
 
 using namespace cgicc;
 using namespace std;
@@ -35,6 +36,7 @@ int main(int argc, char* argv[])
 		}
 		else if(path.find("/Contact") == 0)
 		{
+			handler = new URLHandlerContact();
 		}
 		else
 		{
