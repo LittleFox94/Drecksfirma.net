@@ -5,9 +5,11 @@
 
 #include "inc/template.h"
 #include "inc/urlhandler.h"
+#include "inc/datamanager.h"
 
 #include "inc/urlhandlerstartpage.h"
 #include "inc/urlhandlercontact.h"
+#include "inc/urlhandlerhighscore.h"
 
 using namespace cgicc;
 using namespace std;
@@ -16,6 +18,8 @@ int main(int argc, char* argv[])
 {
 	try
 	{
+		DataManager::connect();
+
 		Cgicc cgi;
 		CgiEnvironment environment = cgi.getEnvironment();
 
@@ -26,7 +30,15 @@ int main(int argc, char* argv[])
 
 		if(path == "" || path == "/")
 		{
+			DataManager::insertCompany("Microsoft");
+			DataManager::insertCompany("Apple");
+			DataManager::insertCompany("Canonical");
+
 			handler = new URLHandlerStartpage();
+		}
+		else if(path.find("/Highscore") == 0)
+		{
+			handler = new URLHandlerHighscore();
 		}
 		else if(path.find("/Add") == 0)
 		{
@@ -49,13 +61,16 @@ int main(int argc, char* argv[])
 			handler->run(&tpl, &cgi);
 
 		cout << "X-Bla: Written in C++" << endl;
-		cout << cgicc::HTTPHTMLHeader() << endl;
+		cout << cgicc::HTTPHTMLHeader();
 
 		cout << tpl.toString();
 	}
-	catch(exception& e)
+	catch(exception* e)
 	{
-
+		cout << "Status: 500 Server error" << endl;
+		cout << "Content-Type: text/plain" << endl << endl;
+		cout << "There was an error." << endl;
+		cout << e->what();
 	}
 
 	return 0;
