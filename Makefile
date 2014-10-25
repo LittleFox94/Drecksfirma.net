@@ -1,7 +1,7 @@
 CC=g++
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -std=c++11 -g
 LDFLAGS=-lcgicc -lhamsterdb -Wl,-rpath -Wl,/usr/local/lib
-SOURCES=main.cpp template.cpp urlhandlerstartpage.cpp urlhandlercontact.cpp datamanager.cpp urlhandlerhighscore.cpp
+SOURCES=main.cpp template.cpp urlhandlerstartpage.cpp urlhandlercontact.cpp datamanager.cpp urlhandlerhighscore.cpp urlhandleradd.cpp urlhandlervote.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=index.bla
 

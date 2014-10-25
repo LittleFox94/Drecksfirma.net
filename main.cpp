@@ -10,6 +10,8 @@
 #include "inc/urlhandlerstartpage.h"
 #include "inc/urlhandlercontact.h"
 #include "inc/urlhandlerhighscore.h"
+#include "inc/urlhandleradd.h"
+#include "inc/urlhandlervote.h"
 
 using namespace cgicc;
 using namespace std;
@@ -30,10 +32,6 @@ int main(int argc, char* argv[])
 
 		if(path == "" || path == "/")
 		{
-			DataManager::insertCompany("Microsoft");
-			DataManager::insertCompany("Apple");
-			DataManager::insertCompany("Canonical");
-
 			handler = new URLHandlerStartpage();
 		}
 		else if(path.find("/Highscore") == 0)
@@ -42,6 +40,11 @@ int main(int argc, char* argv[])
 		}
 		else if(path.find("/Add") == 0)
 		{
+			handler = new URLHandlerAdd();
+		}
+		else if(path.find("/Vote") == 0)
+		{
+			handler = new URLHandlerVote();
 		}
 		else if(path.find("/HallOfShame") == 0)
 		{
@@ -60,6 +63,8 @@ int main(int argc, char* argv[])
 		if(handler != NULL)
 			handler->run(&tpl, &cgi);
 
+		DataManager::disconnect();
+
 		cout << "X-Bla: Written in C++" << endl;
 		cout << cgicc::HTTPHTMLHeader();
 
@@ -67,6 +72,8 @@ int main(int argc, char* argv[])
 	}
 	catch(exception* e)
 	{
+		DataManager::disconnect();
+
 		cout << "Status: 500 Server error" << endl;
 		cout << "Content-Type: text/plain" << endl << endl;
 		cout << "There was an error." << endl;

@@ -2,8 +2,6 @@
 #include "inc/datamanager.h"
 
 #include <string>
-#include <string.h>
-#include <stdio.h>
 
 using namespace std;
 
@@ -21,11 +19,12 @@ void URLHandlerHighscore::run(Template* tpl, cgicc::Cgicc* cgi)
 
 	for(unsigned long long i = 0; i < numEntries; i++)
 	{
-		char buffer[100];
-		memset(buffer, 0, 100);
-		snprintf(buffer, 100, "%d", entries[i].Votes);
-
-		content += "<tr><td>" + entries[i].CompanyName + "</td><td>" + string(buffer) + "</td></tr>";
+		content += "<tr><td>" + entries[i].CompanyName + "</td>"
+			"<td>" + to_string(entries[i].Votes) + 
+			"<form action=\"/index.bla/Vote\" method=\"post\">"
+			"<input type=\"hidden\" name=\"id\" value=\"" + to_string(entries[i].Key) + "\">"
+			"<input type=\"submit\" value=\"Abstimmen\">"
+			"</form></td></tr>";
 	}
 
 	content += "</table>";
