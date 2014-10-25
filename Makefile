@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++11 -g
-LDFLAGS=-lcgicc -lhamsterdb -Wl,-rpath -Wl,/usr/local/lib
-SOURCES=main.cpp template.cpp urlhandlerstartpage.cpp urlhandlercontact.cpp datamanager.cpp urlhandlerhighscore.cpp urlhandleradd.cpp urlhandlervote.cpp
+LDFLAGS=-lcgicc -lhamsterdb -Wl,-rpath -Wl,/usr/local/lib -lfcgi -lfcgi++
+SOURCES=main.cpp template.cpp urlhandlerstartpage.cpp urlhandlercontact.cpp datamanager.cpp urlhandlerhighscore.cpp urlhandleradd.cpp urlhandlervote.cpp FCgiIO.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=index.bla
 
@@ -19,3 +19,4 @@ clean:
 
 deploy: $(EXECUTABLE)
 	cp index.bla ../www/index.bla
+	strip ../www/index.bla
