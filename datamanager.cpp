@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <string.h>
+#include <regex>
 #include <ham/hamsterdb.h>
 
 using namespace std;
@@ -206,6 +207,10 @@ void DataManager::insertVote(unsigned long long companyID)
 
 void DataManager::insertCompany(std::string name)
 {
+	// Validating the name
+	if(name == "")
+		throw new exception();
+	
 	ham_status_t status;
 
 	ham_db_t* companyDB;
