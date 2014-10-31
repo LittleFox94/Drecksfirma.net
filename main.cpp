@@ -80,14 +80,14 @@ int main(int argc, char* argv[])
 
 				cgiIO << tpl.toString();
 			}
-			catch(exception* e)
+			catch(exception& e)
 			{
 				DataManager::disconnect();
 
 				cgiIO << "Status: 500 Server error" << endl;
 				cgiIO << "Content-Type: text/plain" << endl << endl;
 				cgiIO << "There was an error." << endl;
-				cgiIO << e->what();
+				cgiIO << e.what();
 			}
 
 			FCGX_Finish_r(&request);

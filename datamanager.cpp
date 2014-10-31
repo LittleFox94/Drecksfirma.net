@@ -30,21 +30,21 @@ void DataManager::connect()
 				ham_status_t innerStatus;
 				if((innerStatus = ham_env_create(&_hamEnvironment, DRECKSTOOL_DATABASE_FILE, 0, 0644, 0)) != HAM_SUCCESS)
 				{
-					throw new exception();
+					throw exception();
 				}
 
 				ham_db_t* database;
 
 				if((innerStatus = ham_env_create_db(_hamEnvironment, &database, DataManager::DatabaseCompanies, HAM_RECORD_NUMBER, 0)) != HAM_SUCCESS)
 				{
-					throw new exception();
+					throw exception();
 				}
 
 				ham_db_close(database, 0);
 
 				if((innerStatus = ham_env_create_db(_hamEnvironment, &database, DataManager::DatabaseVotes, HAM_RECORD_NUMBER, 0)) != HAM_SUCCESS)
 				{
-					throw new exception();
+					throw exception();
 				}
 
 				ham_db_close(database, 0);
@@ -60,7 +60,7 @@ void DataManager::connect()
 			}
 			else
 			{
-				throw new exception();
+				throw exception();
 			}
 		}
 		else
@@ -84,13 +84,13 @@ void DataManager::getHighscore(unsigned long long* numEntries, HighscoreEntry** 
 	ham_db_t* companyDB;
 	if((status = ham_env_open_db(_hamEnvironment, &companyDB, DataManager::DatabaseCompanies, 0, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	ham_cursor_t* companyCursor;
 	if((status = ham_cursor_create(&companyCursor, companyDB, 0, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	map<unsigned long long, HighscoreEntry> highscore;
@@ -103,7 +103,7 @@ void DataManager::getHighscore(unsigned long long* numEntries, HighscoreEntry** 
 
 	if((status = ham_cursor_move(companyCursor, &key, &rec, HAM_CURSOR_FIRST)) != HAM_SUCCESS && status != HAM_KEY_NOT_FOUND)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	do
@@ -115,7 +115,7 @@ void DataManager::getHighscore(unsigned long long* numEntries, HighscoreEntry** 
 
 		if((status = ham_cursor_move(companyCursor, &key, &rec, HAM_CURSOR_NEXT)) != HAM_SUCCESS && status != HAM_KEY_NOT_FOUND)
 		{
-			throw new exception();
+			throw exception();
 		}
 	} while (status == 0);
 
@@ -125,18 +125,18 @@ void DataManager::getHighscore(unsigned long long* numEntries, HighscoreEntry** 
 	ham_db_t* voteDB;
 	if((status = ham_env_open_db(_hamEnvironment, &voteDB, DataManager::DatabaseVotes, 0, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	ham_cursor_t* voteCursor;
 	if((status = ham_cursor_create(&voteCursor, voteDB, 0, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	if((status = ham_cursor_move(voteCursor, &key, &rec, HAM_CURSOR_FIRST)) != HAM_SUCCESS && status != HAM_KEY_NOT_FOUND)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	do
@@ -151,7 +151,7 @@ void DataManager::getHighscore(unsigned long long* numEntries, HighscoreEntry** 
 
 		if((status = ham_cursor_move(voteCursor, &key, &rec, HAM_CURSOR_NEXT)) != HAM_SUCCESS && status != HAM_KEY_NOT_FOUND)
 		{
-			throw new exception();
+			throw exception();
 		}
 	} while (status == 0);
 
@@ -178,7 +178,7 @@ void DataManager::insertVote(unsigned long long companyID)
 	ham_db_t* voteDB;
 	if((status = ham_env_open_db(_hamEnvironment, &voteDB, DataManager::DatabaseVotes, 0, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	ham_record_t rec;
@@ -195,28 +195,31 @@ void DataManager::insertVote(unsigned long long companyID)
 	if((status = ham_db_insert(voteDB, 0, &key, &rec, 0)) != HAM_SUCCESS)
 	{
 		cout << "X-Debug: Insert" << endl;
-		throw new exception();
+		throw exception();
 	}
 
 	if((status = ham_db_close(voteDB, 0)) != HAM_SUCCESS)
 	{
 		cout << "X-Debug: Close" << endl;
-		throw new exception();
+		throw exception();
 	}
 }
 
 void DataManager::insertCompany(std::string name)
 {
+	// remove all HTML Tags
+	regex r("(<[^>]+>)");
+	name = regex_replace(name, r, "");
+
 	// Validating the name
 	if(name == "")
-		throw new exception();
-	
+		throw exception();
 	ham_status_t status;
 
 	ham_db_t* companyDB;
 	if((status = ham_env_open_db(_hamEnvironment, &companyDB, DataManager::DatabaseCompanies, 0, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	ham_record_t rec;
@@ -234,12 +237,12 @@ void DataManager::insertCompany(std::string name)
 
 	if((status = ham_db_insert(companyDB, 0, &key, &rec, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	if((status = ham_db_close(companyDB, 0)) != HAM_SUCCESS)
 	{
-		throw new exception();
+		throw exception();
 	}
 
 	insertVote(*(unsigned long long*)key.data);
