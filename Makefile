@@ -4,6 +4,7 @@ LDFLAGS=-lcgicc -lhamsterdb -Wl,-rpath -Wl,/usr/local/lib -lfcgi -lfcgi++
 SOURCES=main.cpp template.cpp urlhandlerstartpage.cpp urlhandlercontact.cpp datamanager.cpp urlhandlerhighscore.cpp urlhandleradd.cpp urlhandlervote.cpp FCgiIO.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=index.bla
+DEPLOY_PATH=/var/www/
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -18,5 +19,5 @@ clean:
 	rm ${EXECUTABLE}
 
 deploy: $(EXECUTABLE)
-	cp index.bla ../www/index.bla
-	strip ../www/index.bla
+	cp index.bla $(DEPLOY_PATH)index.bla
+	strip $(DEPLOY_PATH)index.bla
