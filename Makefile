@@ -19,6 +19,6 @@ clean:
 	rm ${EXECUTABLE}
 
 deploy: $(EXECUTABLE)
-	su -c "killall -9 $(EXECUTABLE)"
+	su -c "killall -9 $(EXECUTABLE)" || true
 	cp index.bla $(DEPLOY_PATH)index.bla
 	strip $(DEPLOY_PATH)index.bla
